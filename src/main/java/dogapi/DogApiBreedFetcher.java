@@ -37,7 +37,7 @@ public class DogApiBreedFetcher implements BreedFetcher {
     }
 
     @Override
-    public List<String> getSubBreeds(String breed) {
+    public List<String> getSubBreeds(String breed) throws BreedNotFoundException {
         try{
             JSONObject response = DogApiBreedFetcher.run("https://dog.ceo/api/breed/" + breed + "/list");
             JSONArray breeds = response.getJSONArray("message");
