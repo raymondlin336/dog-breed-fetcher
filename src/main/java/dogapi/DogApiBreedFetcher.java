@@ -16,7 +16,6 @@ import java.util.*;
  * exceptions to align with the requirements of the BreedFetcher interface.
  */
 public class DogApiBreedFetcher implements BreedFetcher {
-    private final OkHttpClient client = new OkHttpClient();
 
     /**
      * Fetch the list of sub breeds for the given breed from the dog.ceo API.
@@ -26,7 +25,7 @@ public class DogApiBreedFetcher implements BreedFetcher {
      */
 
 
-    static JSONObject run(String url) throws IOException {
+    private static JSONObject run(String url) throws IOException {
         final OkHttpClient client = new OkHttpClient();
          Request request = new Request.Builder()
                 .url(url)
@@ -40,7 +39,7 @@ public class DogApiBreedFetcher implements BreedFetcher {
     @Override
     public List<String> getSubBreeds(String breed) {
         try{
-            JSONObject response = DogApiBreedFetcher.run("https://dog.ceo/api/breed/hound/list");
+            JSONObject response = DogApiBreedFetcher.run("https://dog.ceo/api/breed/" + breed + "/list");
             JSONArray breeds = response.getJSONArray("message");
             ArrayList b = new ArrayList<>();
             for (int i = 0; i < breeds.length(); i++) {
@@ -48,8 +47,8 @@ public class DogApiBreedFetcher implements BreedFetcher {
             }
             return b;
         }
-        catch(IOException e) {
-            throw new BreedNotFoundException("");
+        catch(IOException | org.json.JSONException e) {
+            throw new BreedNotFoundException("The breed does not exist.");
         }
     }
 }
